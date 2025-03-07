@@ -5,3 +5,6 @@
 /fabric/build/
 /neoforge/.gradle/
 /neoforge/build/
+/fabric/run
+/neoforge/run
+/common/run

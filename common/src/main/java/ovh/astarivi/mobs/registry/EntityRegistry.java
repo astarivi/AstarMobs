@@ -1,5 +1,6 @@
 package ovh.astarivi.mobs.registry;
 
+import dev.architectury.registry.level.biome.BiomeModifications;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.level.entity.SpawnPlacementsRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
 import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.BearEntity;
@@ -35,6 +37,7 @@ public class EntityRegistry {
 
     private static void initSpawns() {
         SpawnPlacementsRegistry.register(BEAR, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
+        BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.BEAR_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(BEAR.get(), 10, 1, 3)));
     }
 
     public static void init() {
