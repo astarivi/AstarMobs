@@ -27,7 +27,8 @@ public class EntityRegistry {
 
     public static final RegistrySupplier<EntityType<BearEntity>> BEAR = ENTITIES.register("bear", () ->
             EntityType.Builder.of(BearEntity::new, MobCategory.CREATURE)
-                    .sized(1.65f, 1.65f)
+                    .sized(1.65F, 1.3F)
+                    .eyeHeight(0.9F)
                     .build(BEAR_KEY)
     );
 
