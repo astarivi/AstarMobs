@@ -16,7 +16,6 @@ import ovh.astarivi.mobs.AstarMobs;
 
 public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(AstarMobs.MOD_ID, Registries.ITEM);
-
     // Foods
     public static final ResourceKey<Item> RAW_BEAR_MEAT_ID = ResourceKey.create(
             Registries.ITEM,
@@ -29,7 +28,7 @@ public class ItemRegistry {
                             .setId(RAW_BEAR_MEAT_ID)
                             .food(new FoodProperties.Builder()
                                     .nutrition(4)
-                                    .saturationModifier(1F)
+                                    .saturationModifier(0.35F)
                                     .build(),
                             Consumable.builder()
                                     .onConsume(new ApplyStatusEffectsConsumeEffect(
