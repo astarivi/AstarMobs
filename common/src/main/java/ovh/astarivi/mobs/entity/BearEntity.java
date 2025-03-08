@@ -18,7 +18,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -85,16 +84,16 @@ public class BearEntity extends GenericAnimal {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new BearMeleeAttackGoal());
-        this.goalSelector.addGoal(1, new PanicGoal(this, 2.0F, (pathfinderMob) -> pathfinderMob.isBaby() ? DamageTypeTags.PANIC_CAUSES : DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES));
+        this.goalSelector.addGoal(2, new PanicGoal(this, 2.0F, (pathfinderMob) -> pathfinderMob.isBaby() ? DamageTypeTags.PANIC_CAUSES : DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25F));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0F));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new BearEntity.BearHurtByTargetGoal());
-        this.targetSelector.addGoal(2, new BearEntity.BearAttackPlayersGoal());
+        this.targetSelector.addGoal(1, new BearHurtByTargetGoal());
+        this.targetSelector.addGoal(2, new BearAttackPlayersGoal());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, this::isAngryAt));
         // Replace this with Deer
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Fox.class, 10, true, true, null));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, DeerEntity.class, 10, true, true, null));
         this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal(this, false));
     }
 
@@ -166,6 +165,7 @@ public class BearEntity extends GenericAnimal {
             super(BearEntity.this);
         }
 
+        @Override
         public void start() {
             super.start();
             if (BearEntity.this.isBaby()) {
@@ -174,6 +174,7 @@ public class BearEntity extends GenericAnimal {
             }
         }
 
+        @Override
         protected void alertOther(Mob mob, LivingEntity livingEntity) {
             if (mob instanceof BearEntity && !mob.isBaby()) {
                 super.alertOther(mob, livingEntity);
@@ -229,7 +230,6 @@ public class BearEntity extends GenericAnimal {
                 this.resetAttackCooldown();
                 BearEntity.this.stopTriggeredAnim("attack_controller", "attack");
             }
-
         }
 
         public void stop() {

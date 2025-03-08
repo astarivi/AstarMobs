@@ -9,6 +9,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import ovh.astarivi.mobs.AstarMobs;
 
+
 public class TabRegistry {
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(AstarMobs.MOD_ID, Registries.CREATIVE_MODE_TAB);
     public static final RegistrySupplier<CreativeModeTab> ASTARMOBS_TAG = TABS.register(

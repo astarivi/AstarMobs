@@ -1,8 +1,7 @@
 package ovh.astarivi.mobs.entity.generic;
 
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
+
 
 public enum GenericAnimations {
     /// Played when the entity is idling.

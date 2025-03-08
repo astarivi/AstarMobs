@@ -7,6 +7,7 @@ import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 
+
 public class GenericModel<T extends EntityResourceProvider & GeoAnimatable> extends GeoModel<T> {
     @Override
     public ResourceLocation getModelResource(T animatable, @Nullable GeoRenderer<T> renderer) {
