@@ -1,4 +1,6 @@
 {
+  "category.astarmobs": "Asta Mobs",
   "entity.astarmobs.bear": "Oso",
-  "entity.astarmobs.deer": "Ciervo"
+  "entity.astarmobs.deer": "Ciervo",
+  "item.astarmobs.raw_bear_meat": "Carne de oso cruda"
 }

@@ -18,6 +18,7 @@ import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.BearEntity;
 import ovh.astarivi.mobs.entity.DeerEntity;
 
+
 public class EntityRegistry {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(AstarMobs.MOD_ID, Registries.ENTITY_TYPE);
 

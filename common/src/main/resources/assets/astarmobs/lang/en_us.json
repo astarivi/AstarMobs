@@ -1,4 +1,6 @@
 {
+  "category.astarmobs": "Asta Mobs",
   "entity.astarmobs.bear": "Bear",
-  "entity.astarmobs.deer": "Deer"
+  "entity.astarmobs.deer": "Deer",
+  "item.astarmobs.raw_bear_meat": "Raw Bear Meat"
 }
