@@ -1,5 +1,7 @@
 package ovh.astarivi.mobs.entity.generic;
 
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 
 public enum GenericAnimations {
@@ -10,6 +12,8 @@ public enum GenericAnimations {
     /// If an animal can attack, this is the animation that plays
     /// after a successful hit.
     ATTACK("attack"),
+    /// Eat grass to heal up
+    EAT("eat"),
     /// Has a random chance to play when the animal is idle.
     INVESTIGATE("investigate");
 

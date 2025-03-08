@@ -5,7 +5,8 @@ import ovh.astarivi.mobs.AstarMobs;
 
 
 public enum EntityResource {
-    BEAR("bear");
+    BEAR("bear"),
+    DEER("deer");
 
     public final String id;
     public final ResourceLocation model;
