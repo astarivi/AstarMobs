@@ -55,6 +55,11 @@ public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourc
             return new Builder<>(ctx, new GenericModel<>());
         }
 
+        @Contract("_ -> new")
+        public static <T extends Mob & GeoAnimatable & EntityResourceProvider> @NotNull Builder<T> ofAnimatedHead(EntityRendererProvider.Context ctx) {
+            return new Builder<>(ctx, new GenericHeadRotatingModel<>());
+        }
+
         public Builder<T> setBabyCapable(boolean babyCapable) {
             this.babyCapable = babyCapable;
             return this;

@@ -9,7 +9,7 @@ public class RenderRegistry {
         EntityRendererRegistry.register(
                 EntityRegistry.BEAR,
                 ctx -> GenericEntityRenderer.Builder
-                        .ofGeneric(ctx)
+                        .ofAnimatedHead(ctx)
                         .setBabyCapable(true)
                         .withScaleFactor(1.1F)
                         .build()

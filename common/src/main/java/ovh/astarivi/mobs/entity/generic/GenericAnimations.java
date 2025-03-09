@@ -17,12 +17,18 @@ public enum GenericAnimations {
     INVESTIGATE("investigate");
 
     private final RawAnimation animation;
+    private final String name;
 
     GenericAnimations(String animationName) {
+        this.name = animationName;
         this.animation = RawAnimation.begin().thenPlay(animationName);
     }
 
     public RawAnimation getRawAnimation() {
         return this.animation;
+    }
+
+    public String getName() {
+        return name;
     }
 }
