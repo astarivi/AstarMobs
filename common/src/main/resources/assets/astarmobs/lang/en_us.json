@@ -2,5 +2,6 @@
   "category.astarmobs": "Asta Mobs",
   "entity.astarmobs.bear": "Bear",
   "entity.astarmobs.deer": "Deer",
-  "item.astarmobs.raw_bear_meat": "Raw Bear Meat"
+  "item.astarmobs.raw_bear_meat": "Raw Bear Meat",
+  "item.astarmobs.cooked_bear_meat": "Cooked Bear Meat"
 }
