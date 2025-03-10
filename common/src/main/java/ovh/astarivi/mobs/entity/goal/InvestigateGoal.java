@@ -46,7 +46,7 @@ public class InvestigateGoal<T extends Mob & GeoEntity> extends Goal {
         mob.getNavigation().stop();
         mob.stopInPlace();
         remainingTime = animationLength;
-        mob.triggerAnim("walk_controller", GenericAnimations.INVESTIGATE.getName());
+        mob.triggerAnim(GenericAnimations.WALK.getName(), GenericAnimations.INVESTIGATE.getName());
     }
 
     public void tick() {

@@ -29,6 +29,7 @@ import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.generic.EntityResource;
 import ovh.astarivi.mobs.entity.generic.GenericAnimal;
 import ovh.astarivi.mobs.entity.generic.GenericAnimations;
+import ovh.astarivi.mobs.entity.generic.GenericControllers;
 import ovh.astarivi.mobs.registry.EntityRegistry;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -231,8 +232,8 @@ public class DeerEntity extends GenericAnimal {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "walk_controller", 5, this::movementCycle));
-        controllers.add(new AnimationController<>(this, "attack_controller", 3, event -> {
+        controllers.add(new AnimationController<>(this, GenericControllers.WALK.getName(), 5, this::movementCycle));
+        controllers.add(new AnimationController<>(this, GenericControllers.ATTACK.getName(), 3, event -> {
             swinging = false;
             return PlayState.STOP;
         }).triggerableAnim("attack", GenericAnimations.ATTACK.getRawAnimation()));

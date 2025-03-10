@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import ovh.astarivi.mobs.entity.generic.EntityResource;
 import ovh.astarivi.mobs.entity.generic.GenericAnimal;
 import ovh.astarivi.mobs.entity.generic.GenericAnimations;
+import ovh.astarivi.mobs.entity.generic.GenericControllers;
 import ovh.astarivi.mobs.entity.goal.InvestigateGoal;
 import ovh.astarivi.mobs.registry.EntityRegistry;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -40,14 +41,13 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.UUID;
 
 
-// TODO: Use "investigate" animation with a goal, and allow bears to eat honey to heal while dropping honeycomb
+// TODO: Allow bears to eat honey to heal while dropping honeycomb
 public class BearEntity extends GenericAnimal {
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(10, 20);
     private int angerTime;
     @Nullable private UUID angerTarget;
     private int warningSoundTicks;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public boolean isInvestigating = false;
 
     public BearEntity(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
@@ -276,9 +276,9 @@ public class BearEntity extends GenericAnimal {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "walk_controller", 5, this::walkCycle
+        controllerRegistrar.add(new AnimationController<>(this, GenericControllers.WALK.getName(), 5, this::walkCycle
         ).triggerableAnim("investigate", GenericAnimations.INVESTIGATE.getRawAnimation()));
-        controllerRegistrar.add(new AnimationController<>(this, "attack_controller", 3, event -> {
+        controllerRegistrar.add(new AnimationController<>(this, GenericControllers.ATTACK.getName(), 3, event -> {
             swinging = false;
             return PlayState.STOP;
         }).triggerableAnim("attack", GenericAnimations.ATTACK.getRawAnimation()));
