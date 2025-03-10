@@ -29,6 +29,7 @@ import ovh.astarivi.mobs.entity.generic.EntityResource;
 import ovh.astarivi.mobs.entity.generic.GenericAnimal;
 import ovh.astarivi.mobs.entity.generic.GenericAnimations;
 import ovh.astarivi.mobs.entity.generic.GenericControllers;
+import ovh.astarivi.mobs.entity.goal.BearFetchHoneyGoal;
 import ovh.astarivi.mobs.entity.goal.InvestigateGoal;
 import ovh.astarivi.mobs.registry.EntityRegistry;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -41,7 +42,8 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.UUID;
 
 
-// TODO: Allow bears to eat honey to heal while dropping honeycomb
+// TODO: Allow bears to stand at the side of the beehive instead of on top when fetching honey
+// TODO: Make bears non-hostile after eating honey for a set amount of time
 public class BearEntity extends GenericAnimal {
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(10, 20);
     private int angerTime;
@@ -89,10 +91,11 @@ public class BearEntity extends GenericAnimal {
         this.goalSelector.addGoal(1, new BearMeleeAttackGoal());
         this.goalSelector.addGoal(2, new PanicGoal(this, 2.0F, (pathfinderMob) -> pathfinderMob.isBaby() ? DamageTypeTags.PANIC_CAUSES : DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25F));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0F));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(7, new InvestigateGoal<>(this, 63 + 5));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(5, new BearFetchHoneyGoal(this, 1D, 3));
+        this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0F));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(8, new InvestigateGoal<>(this, 63 + 5));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new BearHurtByTargetGoal());
         this.targetSelector.addGoal(2, new BearAttackPlayersGoal());
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, this::isAngryAt));
@@ -278,13 +281,13 @@ public class BearEntity extends GenericAnimal {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(new AnimationController<>(this, GenericControllers.WALK.getName(), 5, this::walkCycle
         ).triggerableAnim("investigate", GenericAnimations.INVESTIGATE.getRawAnimation()));
+
         controllerRegistrar.add(new AnimationController<>(this, GenericControllers.ATTACK.getName(), 3, event -> {
             swinging = false;
             return PlayState.STOP;
-        }).triggerableAnim("attack", GenericAnimations.ATTACK.getRawAnimation()));
-
+        }).triggerableAnim(GenericAnimations.ATTACK.getName(), GenericAnimations.ATTACK.getRawAnimation()
+        ).triggerableAnim(GenericAnimations.EAT.getName(), GenericAnimations.EAT.getRawAnimation()));
     }
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
