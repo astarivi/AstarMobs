@@ -2,6 +2,10 @@ package ovh.astarivi.mobs.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -46,6 +50,7 @@ import java.util.UUID;
 // TODO: Make bears non-hostile after eating honey for a set amount of time
 public class BearEntity extends GenericAnimal {
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(10, 20);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(BearEntity.class, EntityDataSerializers.INT);
     private int angerTime;
     @Nullable private UUID angerTarget;
     private int warningSoundTicks;
@@ -60,6 +65,11 @@ public class BearEntity extends GenericAnimal {
         return EntityResource.BEAR;
     }
 
+    @Override
+    public ResourceLocation getTexture() {
+        return getEntityResource().textureVariants.get(this.entityData.get(VARIANT));
+    }
+
     // region Attributes
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes()
@@ -71,15 +81,23 @@ public class BearEntity extends GenericAnimal {
     }
 
     @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(VARIANT, 0);
+    }
+
+    @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.readPersistentAngerSaveData(this.level(), compoundTag);
+        this.entityData.set(VARIANT, compoundTag.getInt("Variant"));
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         this.addPersistentAngerSaveData(compoundTag);
+        compoundTag.putInt("Variant", this.entityData.get(VARIANT));
     }
     // endregion
 
@@ -162,7 +180,9 @@ public class BearEntity extends GenericAnimal {
             spawnGroupData = new AgeableMob.AgeableMobGroupData(1.0F);
         }
 
-        return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, entitySpawnReason, spawnGroupData);
+        SpawnGroupData data = super.finalizeSpawn(serverLevelAccessor, difficultyInstance, entitySpawnReason, spawnGroupData);
+        this.entityData.set(VARIANT, this.random.nextInt(getEntityResource().variants));
+        return data;
     }
 
     // Alert adult bears if baby is attacked

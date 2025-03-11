@@ -2,6 +2,7 @@ package ovh.astarivi.mobs.entity.generic;
 
 import net.minecraft.resources.ResourceLocation;
 
+
 public interface EntityResourceProvider {
     EntityResource getEntityResource();
 
@@ -14,6 +15,6 @@ public interface EntityResourceProvider {
     }
 
     default ResourceLocation getTexture() {
-        return getEntityResource().texture;
+        return getEntityResource().textureVariants.getFirst();
     }
 }

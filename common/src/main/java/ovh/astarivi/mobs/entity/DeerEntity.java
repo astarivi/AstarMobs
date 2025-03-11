@@ -250,7 +250,7 @@ public class DeerEntity extends GenericAnimal {
     public ResourceLocation getTexture() {
         return ResourceLocation.fromNamespaceAndPath(
                 AstarMobs.MOD_ID,
-                "textures/entity/deer%s.png".formatted(isMale() ? "_male": "")
+                "textures/entity/deer/deer%s.png".formatted(isMale() ? "_male": "")
         );
     }
     // endregion
