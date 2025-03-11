@@ -11,6 +11,7 @@ public class RenderRegistry {
                 ctx -> GenericEntityRenderer.Builder
                         .ofAnimatedHead(ctx)
                         .setBabyCapable(true)
+                        .setLayerSupport(true)
                         .withScaleFactor(1.1F)
                         .build()
         );

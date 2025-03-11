@@ -15,9 +15,9 @@ import software.bernie.geckolib.model.GeoModel;
 
 
 public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourceProvider> extends GenericRenderer<T> {
-    private final boolean babyCapable;
-    private float scaleFactor = 1.0F;
-    private float babyScaleFactor = 0.5F;
+    protected final boolean babyCapable;
+    protected float scaleFactor = 1.0F;
+    protected float babyScaleFactor = 0.5F;
 
     public GenericEntityRenderer(EntityRendererProvider.Context ctx, GeoModel<T> modelProvider, boolean hasBaby) {
         super(ctx, modelProvider);
@@ -29,11 +29,19 @@ public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourc
         this.babyCapable = builder.babyCapable;
         this.scaleFactor = builder.scaleFactor;
         this.babyScaleFactor = builder.babyScaleFactor;
+
+        if (builder.layerSupport) {
+            addRenderLayer(new GenericGeoLayer<>(this));
+        }
     }
 
     @Override
     public void preRender(PoseStack poseStack, T animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int renderColor) {
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, renderColor);
+        if (isReRender) {
+            return;
+        }
+
         float newScaleFactor = animatable.isBaby() && babyCapable ? scaleFactor * babyScaleFactor : scaleFactor;
         poseStack.scale(newScaleFactor, newScaleFactor, newScaleFactor);
     }
@@ -42,6 +50,7 @@ public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourc
         private final EntityRendererProvider.Context ctx;
         private final GeoModel<T> modelProvider;
         private boolean babyCapable = false;
+        private boolean layerSupport = false;
         private float scaleFactor = 1.0f;
         private float babyScaleFactor = 0.5f;
 
@@ -72,6 +81,11 @@ public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourc
 
         public Builder<T> withBabyScaleFactor(float babyScaleFactor) {
             this.babyScaleFactor = babyScaleFactor;
+            return this;
+        }
+
+        public Builder<T> setLayerSupport(boolean value) {
+            this.layerSupport = value;
             return this;
         }
 

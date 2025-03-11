@@ -29,10 +29,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ovh.astarivi.mobs.entity.generic.EntityResource;
-import ovh.astarivi.mobs.entity.generic.GenericAnimal;
-import ovh.astarivi.mobs.entity.generic.GenericAnimations;
-import ovh.astarivi.mobs.entity.generic.GenericControllers;
+import ovh.astarivi.mobs.entity.generic.*;
 import ovh.astarivi.mobs.entity.goal.BearFetchHoneyGoal;
 import ovh.astarivi.mobs.entity.goal.InvestigateGoal;
 import ovh.astarivi.mobs.registry.EntityRegistry;
@@ -69,6 +66,16 @@ public class BearEntity extends GenericAnimal {
     public ResourceLocation getTexture() {
         return getEntityResource().textureVariants.get(this.entityData.get(VARIANT));
     }
+
+//    @Override
+//    public boolean shouldDisplayLayer() {
+//        return true;
+//    }
+//
+//    @Override
+//    public ResourceLocation getDisplayLayer() {
+//        return getEntityResource().textureOverlays.getFirst();
+//    }
 
     // region Attributes
     public static AttributeSupplier.@NotNull Builder createAttributes() {
@@ -181,7 +188,7 @@ public class BearEntity extends GenericAnimal {
         }
 
         SpawnGroupData data = super.finalizeSpawn(serverLevelAccessor, difficultyInstance, entitySpawnReason, spawnGroupData);
-        this.entityData.set(VARIANT, this.random.nextInt(getEntityResource().variants));
+        this.entityData.set(VARIANT, this.random.nextInt(getEntityResource().getVariantCount()));
         return data;
     }
 
