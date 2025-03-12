@@ -28,12 +28,12 @@ public class InvestigateGoal<T extends Mob & GeoEntity> extends Goal {
     @Override
     public boolean canUse() {
         // Should play every 5 mins on average
-        return !mob.isInWater() && mob.getRandom().nextFloat() < chance;
+        return mob.getRandom().nextFloat() < chance && !mob.isInWater();
     }
 
     @Override
     public boolean canContinueToUse() {
-        return this.remainingTime >= 0;
+        return this.remainingTime > 0;
     }
 
     @Override

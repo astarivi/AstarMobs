@@ -125,7 +125,7 @@ public class BearEntity extends GenericAnimal {
         this.goalSelector.addGoal(5, new BearFetchHoneyGoal(this, 1D, 3));
         this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0F));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(8, new InvestigateGoal<>(this, 63 + 5));
+        this.goalSelector.addGoal(8, new InvestigateGoal<>(this, 63 + 5, 1.5F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new BearHurtByTargetGoal());
         this.targetSelector.addGoal(2, new BearAttackPlayersGoal());
@@ -350,7 +350,7 @@ public class BearEntity extends GenericAnimal {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(new AnimationController<>(this, GenericControllers.WALK.getName(), 5, this::walkCycle
-        ).triggerableAnim("investigate", GenericAnimations.INVESTIGATE.getRawAnimation()));
+        ).triggerableAnim(GenericAnimations.INVESTIGATE.getName(), GenericAnimations.INVESTIGATE.getRawAnimation()));
 
         controllerRegistrar.add(new AnimationController<>(this, GenericControllers.ATTACK.getName(), 3, event -> {
             swinging = false;

@@ -1,5 +1,6 @@
 package ovh.astarivi.mobs.registry;
 
+import dev.architectury.core.item.ArchitecturySpawnEggItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -16,6 +17,20 @@ import ovh.astarivi.mobs.AstarMobs;
 
 public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(AstarMobs.MOD_ID, Registries.ITEM);
+    // Spawn Eggs
+    public static final ResourceKey<Item> BEAR_SPAWN_EGG_ID = ResourceKey.create(
+            Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "bear_spawn_egg")
+    );
+    public static final RegistrySupplier<Item> BEAR_SPAWN_EGG = ITEMS.register(
+            "bear_spawn_egg",
+            () -> new ArchitecturySpawnEggItem(
+                    EntityRegistry.BEAR,
+                    new Item.Properties()
+                            .setId(BEAR_SPAWN_EGG_ID)
+                            .arch$tab(TabRegistry.ASTARMOBS_TAG))
+    );
+
     // Foods
     public static final ResourceKey<Item> RAW_BEAR_MEAT_ID = ResourceKey.create(
             Registries.ITEM,
