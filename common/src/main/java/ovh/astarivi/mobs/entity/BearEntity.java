@@ -13,6 +13,8 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -24,6 +26,7 @@ import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,10 +47,10 @@ import java.util.UUID;
 
 
 // TODO: Allow bears to stand at the side of the beehive instead of on top when fetching honey
-// TODO: Make bears non-hostile after eating honey for a set amount of time
 public class BearEntity extends GenericAnimal {
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(10, 20);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(BearEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> PACIFIED_TICKS = SynchedEntityData.defineId(BearEntity.class, EntityDataSerializers.INT);
     private int angerTime;
     @Nullable private UUID angerTarget;
     private int warningSoundTicks;
@@ -67,15 +70,15 @@ public class BearEntity extends GenericAnimal {
         return getEntityResource().textureVariants.get(this.entityData.get(VARIANT));
     }
 
-//    @Override
-//    public boolean shouldDisplayLayer() {
-//        return true;
-//    }
-//
-//    @Override
-//    public ResourceLocation getDisplayLayer() {
-//        return getEntityResource().textureOverlays.getFirst();
-//    }
+    @Override
+    public boolean shouldDisplayLayer() {
+        return isPacified();
+    }
+
+    @Override
+    public ResourceLocation getDisplayLayer() {
+        return getEntityResource().textureOverlays.getFirst();
+    }
 
     // region Attributes
     public static AttributeSupplier.@NotNull Builder createAttributes() {
@@ -91,6 +94,7 @@ public class BearEntity extends GenericAnimal {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(VARIANT, 0);
+        builder.define(PACIFIED_TICKS, 0);
     }
 
     @Override
@@ -98,6 +102,7 @@ public class BearEntity extends GenericAnimal {
         super.readAdditionalSaveData(compoundTag);
         this.readPersistentAngerSaveData(this.level(), compoundTag);
         this.entityData.set(VARIANT, compoundTag.getInt("Variant"));
+        this.entityData.set(PACIFIED_TICKS, compoundTag.getInt("Pacified"));
     }
 
     @Override
@@ -105,6 +110,7 @@ public class BearEntity extends GenericAnimal {
         super.addAdditionalSaveData(compoundTag);
         this.addPersistentAngerSaveData(compoundTag);
         compoundTag.putInt("Variant", this.entityData.get(VARIANT));
+        compoundTag.putInt("Pacified", this.entityData.get(PACIFIED_TICKS));
     }
     // endregion
 
@@ -123,7 +129,6 @@ public class BearEntity extends GenericAnimal {
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new BearHurtByTargetGoal());
         this.targetSelector.addGoal(2, new BearAttackPlayersGoal());
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, this::isAngryAt));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, DeerEntity.class, 10, true, true, null));
         this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal(this, false));
     }
@@ -141,6 +146,18 @@ public class BearEntity extends GenericAnimal {
     @Override
     protected float getWaterSlowDown() {
         return 0.80F;
+    }
+
+    public boolean isPacified() {
+        return getPacifiedTicks() > 0;
+    }
+
+    public void setPacifiedTicks(int value) {
+        this.entityData.set(PACIFIED_TICKS, value);
+    }
+
+    public int getPacifiedTicks() {
+        return this.entityData.get(PACIFIED_TICKS);
     }
 
     @Override
@@ -169,6 +186,27 @@ public class BearEntity extends GenericAnimal {
     }
 
     @Override
+    public @NotNull InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        ItemStack itemStack = player.getItemInHand(interactionHand);
+
+        if (!isBaby() && itemStack.is(Items.HONEY_BOTTLE) && !isPacified()) {
+            itemStack.consume(1, player);
+
+            if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) {
+                player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
+            }
+
+            setPacifiedTicks(6000 + random.nextInt(2000 + 1));
+            player.playSound(SoundEvents.BOTTLE_EMPTY, 1.0F, 1.0F);
+            forgetCurrentTargetAndRefreshUniversalAnger();
+
+            return InteractionResult.SUCCESS;
+        }
+
+        return super.mobInteract(player, interactionHand);
+    }
+
+    @Override
     public void tick() {
         super.tick();
 
@@ -178,6 +216,11 @@ public class BearEntity extends GenericAnimal {
 
         if (!this.level().isClientSide) {
             this.updatePersistentAnger((ServerLevel)this.level(), true);
+
+            int pacifiedTicks = getPacifiedTicks();
+            if (pacifiedTicks > 0) {
+                setPacifiedTicks(pacifiedTicks - 1);
+            }
         }
     }
 
@@ -217,11 +260,11 @@ public class BearEntity extends GenericAnimal {
 
     class BearAttackPlayersGoal extends NearestAttackableTargetGoal<Player> {
         public BearAttackPlayersGoal() {
-            super(BearEntity.this, Player.class, 20, false, true, null);
+            super(BearEntity.this, Player.class, 20, true, true, null);
         }
 
         public boolean canUse() {
-            if (BearEntity.this.isBaby()) {
+            if (BearEntity.this.isPacified() || BearEntity.this.isBaby()) {
                 return false;
             }
 

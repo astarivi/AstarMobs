@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -81,6 +82,11 @@ public class BearFetchHoneyGoal extends MoveToBlockGoal {
     }
 
     @Override
+    public boolean canUse() {
+        return !bear.isBaby() && !bear.isPacified() && super.canUse();
+    }
+
+    @Override
     public boolean canContinueToUse() {
         return !shouldStop || super.canContinueToUse();
     }
@@ -107,6 +113,7 @@ public class BearFetchHoneyGoal extends MoveToBlockGoal {
         }
 
         if (tickCounter == 0) {
+            bear.stopTriggeredAnim(GenericControllers.ATTACK.getName(), GenericAnimations.EAT.getName());
             bear.triggerAnim(GenericControllers.ATTACK.getName(), GenericAnimations.EAT.getName());
         }
 
@@ -115,13 +122,16 @@ public class BearFetchHoneyGoal extends MoveToBlockGoal {
         }
 
         if (tickCounter == 60) {
-            BlockState state = mob.level().getBlockState(blockPos);
-            if (state.getBlock() instanceof BeehiveBlock beehiveBlock) {
-                beehiveBlock.resetHoneyLevel(mob.level(), state, blockPos);
-                BeehiveBlock.dropHoneycomb(mob.level(), blockPos);
-            }
+            Level level = mob.level();
 
-            mob.level().playSound(null, blockPos, SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 2.0f, 1f);
+            BlockState state = level.getBlockState(blockPos);
+            if (state.getBlock() instanceof BeehiveBlock beehiveBlock && state.getValue(BeehiveBlock.HONEY_LEVEL) == 5) {
+                beehiveBlock.resetHoneyLevel(level, state, blockPos);
+                BeehiveBlock.dropHoneycomb(level, blockPos);
+                level.playSound(null, blockPos, SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 2.0f, 1f);
+                bear.setPacifiedTicks(6000);
+                bear.forgetCurrentTargetAndRefreshUniversalAnger();
+            }
 
             shouldStop = true;
         }
