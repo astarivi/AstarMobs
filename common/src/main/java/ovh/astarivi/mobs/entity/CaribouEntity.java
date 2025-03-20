@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -33,6 +34,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ovh.astarivi.mobs.entity.generic.EntityResource;
@@ -87,6 +89,7 @@ public class CaribouEntity extends GenericAnimal {
     // region Attributes
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes()
+                .add(Attributes.TEMPT_RANGE, 5.0D)
                 .add(Attributes.MAX_HEALTH, 10.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D)
@@ -157,13 +160,14 @@ public class CaribouEntity extends GenericAnimal {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5D, false));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5F, false));
         this.goalSelector.addGoal(2, new PanicGoal(this, 2.0F));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
-        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25F));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0F));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.25F, this::isFood, false));
+        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25F));
+        this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0F));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -312,6 +316,16 @@ public class CaribouEntity extends GenericAnimal {
         }
 
         setAntlerTicks(0);
+    }
+
+    @Override
+    protected @NotNull Vec3 getLeashOffset() {
+        return new Vec3(0.0F, 1.35F, (this.getBbWidth() * 0.4F));
+    }
+
+    @Override
+    public boolean canBeLeashed() {
+        return !isSterile();
     }
 
     @Override
