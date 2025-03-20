@@ -33,6 +33,10 @@ public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourc
         if (builder.layerSupport) {
             addRenderLayer(new GenericGeoLayer<>(this));
         }
+
+        if (builder.glowingLayer) {
+            addRenderLayer(new SelectiveGlowingGeoLayer<>(this));
+        }
     }
 
     @Override
@@ -51,6 +55,7 @@ public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourc
         private final GeoModel<T> modelProvider;
         private boolean babyCapable = false;
         private boolean layerSupport = false;
+        private boolean glowingLayer = false;
         private float scaleFactor = 1.0f;
         private float babyScaleFactor = 0.5f;
 
@@ -86,6 +91,11 @@ public class GenericEntityRenderer<T extends Mob & GeoAnimatable & EntityResourc
 
         public Builder<T> setLayerSupport(boolean value) {
             this.layerSupport = value;
+            return this;
+        }
+
+        public Builder<T> setGlowingLayerSupport(boolean value) {
+            this.glowingLayer = value;
             return this;
         }
 

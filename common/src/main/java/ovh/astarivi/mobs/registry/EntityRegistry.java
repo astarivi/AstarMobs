@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
 import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.BearEntity;
+import ovh.astarivi.mobs.entity.CaribouEntity;
 import ovh.astarivi.mobs.entity.DeerEntity;
 
 
@@ -25,6 +26,10 @@ public class EntityRegistry {
     public static final ResourceKey<EntityType<?>> BEAR_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE,
             ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "bear")
+    );
+    public static final ResourceKey<EntityType<?>> CARIBOU_KEY = ResourceKey.create(
+            Registries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "caribou")
     );
     public static final ResourceKey<EntityType<?>> DEER_KEY = ResourceKey.create(
             Registries.ENTITY_TYPE,
@@ -38,6 +43,13 @@ public class EntityRegistry {
                     .build(BEAR_KEY)
     );
 
+    public static final RegistrySupplier<EntityType<CaribouEntity>> CARIBOU = ENTITIES.register("caribou", () ->
+            EntityType.Builder.of(CaribouEntity::new, MobCategory.CREATURE)
+                    .sized(1.2F, 2.0F)
+                    .eyeHeight(1.55F)
+                    .build(CARIBOU_KEY)
+    );
+
     public static final RegistrySupplier<EntityType<DeerEntity>> DEER = ENTITIES.register("deer", () ->
             EntityType.Builder.of(DeerEntity::new, MobCategory.CREATURE)
                     .sized(1F, 1.7F)
@@ -48,6 +60,7 @@ public class EntityRegistry {
     private static void initAttributes() {
         EntityAttributeRegistry.register(BEAR, BearEntity::createAttributes);
         EntityAttributeRegistry.register(DEER, DeerEntity::createAttributes);
+        EntityAttributeRegistry.register(CARIBOU, CaribouEntity::createAttributes);
     }
 
     private static void initSpawns() {
@@ -56,6 +69,11 @@ public class EntityRegistry {
 
         SpawnPlacementsRegistry.register(DEER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.DEER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(DEER.get(), 8, 1, 4)));
+
+        SpawnPlacementsRegistry.register(CARIBOU, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
+        BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 8, 1, 4)));
+        BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_NETHER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 1, 2, 3)));
+
     }
 
     public static void init() {

@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 public enum EntityResource {
     BEAR("bear", 2, 1),
+    CARIBOU("caribou", 4, 4),
     DEER("deer");
 
     public final String id;

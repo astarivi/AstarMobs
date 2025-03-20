@@ -2,6 +2,7 @@
   "category.astarmobs": "Asta Mobs",
   "entity.astarmobs.bear": "Oso",
   "entity.astarmobs.deer": "Ciervo",
+  "entity.astarmobs.caribou": "Caribú",
   "item.astarmobs.bear_spawn_egg": "Generar oso",
   "item.astarmobs.raw_bear_meat": "Carne de oso cruda",
   "item.astarmobs.cooked_bear_meat": "Carne de oso cocinada"

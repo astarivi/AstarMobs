@@ -88,7 +88,7 @@ public class BearFetchHoneyGoal extends MoveToBlockGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return !shouldStop || super.canContinueToUse();
+        return !shouldStop && super.canContinueToUse();
     }
 
     @Override

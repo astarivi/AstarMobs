@@ -27,4 +27,8 @@ public interface EntityResourceProvider {
     default boolean shouldDisplayLayer() {
         return false;
     }
+
+    default boolean shouldGlow() {
+        return false;
+    }
 }
