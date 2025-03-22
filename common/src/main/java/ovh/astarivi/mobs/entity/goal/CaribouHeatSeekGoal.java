@@ -14,6 +14,7 @@ import ovh.astarivi.mobs.entity.CaribouEntity;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
+
 public class CaribouHeatSeekGoal extends MoveToBlockGoal {
     private static final ArrayList<BlockPos> offsets = precomputeOffsets();
     private final CaribouEntity caribou;
@@ -21,15 +22,16 @@ public class CaribouHeatSeekGoal extends MoveToBlockGoal {
 
     public CaribouHeatSeekGoal(CaribouEntity caribou, double d, int i) {
         super(caribou, d, i);
-        this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
         this.caribou = caribou;
     }
 
     private static @NotNull ArrayList<BlockPos> precomputeOffsets() {
         ArrayList<BlockPos> offsets = new ArrayList<>();
+
         // How many blocks to look for upwards
         int maxYDifference = -1;
-        int searchRange = 24;
+        int searchRange = 16;
 
         for (int y = 0; y >= maxYDifference; y--) {
             for (int r = 0; r < searchRange; r++) {
@@ -48,7 +50,7 @@ public class CaribouHeatSeekGoal extends MoveToBlockGoal {
 
     @Override
     public double acceptedDistance() {
-        return 1;
+        return 0.5;
     }
 
     @Override

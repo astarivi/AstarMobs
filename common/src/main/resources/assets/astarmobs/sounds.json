@@ -1,0 +1,16 @@
+{
+  "caribou_ambient": {
+    "subtitle": "astarmobs.caribou_ambient",
+    "sounds": [
+      "astarmobs:caribou_ambient_0",
+      "astarmobs:caribou_ambient_1"
+    ]
+  },
+  "caribou_hurt": {
+    "subtitle": "astarmobs.caribou_hurt",
+    "sounds": [
+      "astarmobs:caribou_hurt_0",
+      "astarmobs:caribou_hurt_1"
+    ]
+  }
+}

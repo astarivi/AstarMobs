@@ -11,12 +11,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -41,7 +42,9 @@ import ovh.astarivi.mobs.entity.generic.EntityResource;
 import ovh.astarivi.mobs.entity.generic.GenericAnimal;
 import ovh.astarivi.mobs.entity.generic.GenericAnimations;
 import ovh.astarivi.mobs.entity.generic.GenericControllers;
+import ovh.astarivi.mobs.entity.goal.CaribouHeatSeekGoal;
 import ovh.astarivi.mobs.registry.EntityRegistry;
+import ovh.astarivi.mobs.registry.SoundRegistry;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -89,7 +92,7 @@ public class CaribouEntity extends GenericAnimal {
     // region Attributes
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.TEMPT_RANGE, 5.0D)
+                .add(Attributes.TEMPT_RANGE, 10.0D)
                 .add(Attributes.MAX_HEALTH, 10.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D)
@@ -165,9 +168,10 @@ public class CaribouEntity extends GenericAnimal {
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.25F, this::isFood, false));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25F));
-        this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0F));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(6, new CaribouHeatSeekGoal(this, 1F, 3));
+        this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0F));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
     }
 
     @Override
@@ -243,6 +247,7 @@ public class CaribouEntity extends GenericAnimal {
 
     @Override
     public void startPersistentAngerTimer() {
+
     }
 
     @Override
@@ -270,7 +275,7 @@ public class CaribouEntity extends GenericAnimal {
 
                 if (!isInLava() && (blockBelow != Blocks.MAGMA_BLOCK)) {
                     hurtServer(serverLevel, this.damageSources().dryOut(), 1.0F);
-                    playSound(SoundEvents.FIRE_EXTINGUISH, 0.7f, 1f);
+                    playSound(SoundEvents.FIRE_EXTINGUISH, 0.3f, 1f);
                     this.level().addParticle(ParticleTypes.FLAME, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
                 }
             }
@@ -357,6 +362,23 @@ public class CaribouEntity extends GenericAnimal {
         this.entityData.set(ANTLER_TICKS, this.random.nextInt(getAntlerGrowTicks()));
 
         return data;
+    }
+    // endregion
+
+    // region Sounds
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return SoundRegistry.CARIBOU_AMBIENT.get();
+    }
+
+    @Override
+    protected @Nullable SoundEvent getHurtSound(DamageSource damageSource) {
+        return SoundRegistry.CARIBOU_HURT.get();
+    }
+
+    @Override
+    protected @Nullable SoundEvent getDeathSound() {
+        return SoundRegistry.CARIBOU_HURT.get();
     }
     // endregion
 

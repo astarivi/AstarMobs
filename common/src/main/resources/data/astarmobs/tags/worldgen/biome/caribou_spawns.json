@@ -1,8 +1,13 @@
 {
   "values": [
-    "forest",
-    "birch_forest",
-    "dark_forest",
-    "old_growth_birch_forest"
+    "old_growth_birch_forest",
+    "old_growth_pine_taiga",
+    "old_growth_spruce_taiga",
+    "taiga",
+    "snowy_taiga",
+    "grove",
+    "snowy_slopes",
+    "frozen_peaks",
+    "jagged_peaks"
   ]
 }
