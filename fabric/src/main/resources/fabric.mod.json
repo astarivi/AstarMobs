@@ -2,17 +2,16 @@
   "schemaVersion": 1,
   "id": "astarmobs",
   "version": "${version}",
-  "name": "Asta Mobs",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Astar Mobs",
+  "description": "Adds diverse animals with unique behaviors, making your world feel more alive",
   "authors": [
     "astarivi",
     "Monomaximo"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/astarivi/AstarMobs"
   },
-  "license": "CC0-1.0",
+  "license": "GPL-3.0-or-later",
   "icon": "assets/astarmobs/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -35,6 +34,6 @@
     "fabric-api": "*"
   },
   "suggests": {
-    "another-mod": "*"
+    "modmenu": "*"
   }
 }

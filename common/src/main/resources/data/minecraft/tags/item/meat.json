@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "astarmobs:raw_bear_meat"
+    "astarmobs:raw_bear_meat",
+    "astarmobs:raw_venison"
   ]
 }

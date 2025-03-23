@@ -1,15 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/astarivi/AstarMobs/issues"
+license = "GPL-3.0-or-later"
 
 [[mods]]
 modId = "astarmobs"
 version = "${version}"
-displayName = "AstarMobs"
-authors = "Me!"
+displayName = "Astar Mobs"
+authors = "astarivi, Monomaximo"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Adds diverse animals with unique behaviors, making your world feel more alive
 '''
 #logoFile = ""
 
@@ -31,6 +31,13 @@ side = "BOTH"
 modId = "architectury"
 type = "required"
 versionRange = "[15.0.1,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.astarmobs]]
+modId = "geckolib"
+type = "required"
+versionRange = "[4.8.1,)"
 ordering = "AFTER"
 side = "BOTH"
 
