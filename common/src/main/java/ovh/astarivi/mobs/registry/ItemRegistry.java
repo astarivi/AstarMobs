@@ -22,6 +22,10 @@ public class ItemRegistry {
             Registries.ITEM,
             ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "bear_spawn_egg")
     );
+    public static final ResourceKey<Item> CARIBOU_SPAWN_EGG_ID = ResourceKey.create(
+            Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "caribou_spawn_egg")
+    );
     public static final RegistrySupplier<Item> BEAR_SPAWN_EGG = ITEMS.register(
             "bear_spawn_egg",
             () -> new ArchitecturySpawnEggItem(
@@ -30,6 +34,15 @@ public class ItemRegistry {
                             .setId(BEAR_SPAWN_EGG_ID)
                             .arch$tab(TabRegistry.ASTARMOBS_TAG))
     );
+    public static final RegistrySupplier<Item> CARIBOU_SPAWN_EGG = ITEMS.register(
+            "caribou_spawn_egg",
+            () -> new ArchitecturySpawnEggItem(
+                    EntityRegistry.CARIBOU,
+                    new Item.Properties()
+                            .setId(CARIBOU_SPAWN_EGG_ID)
+                            .arch$tab(TabRegistry.ASTARMOBS_TAG))
+    );
+
 
     // Foods
     public static final ResourceKey<Item> RAW_BEAR_MEAT_ID = ResourceKey.create(
