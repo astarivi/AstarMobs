@@ -3,7 +3,11 @@
   "entity.astarmobs.bear": "Oso",
   "entity.astarmobs.deer": "Ciervo",
   "entity.astarmobs.caribou": "Caribú",
+  "subtitles.astarmobs.caribou_ambient": "Caribú suspira",
+  "subtitles.astarmobs.caribou_hurt": "Caribú gruñe",
   "item.astarmobs.bear_spawn_egg": "Generar oso",
   "item.astarmobs.raw_bear_meat": "Carne de oso cruda",
-  "item.astarmobs.cooked_bear_meat": "Carne de oso cocinada"
+  "item.astarmobs.cooked_bear_meat": "Carne de oso cocinada",
+  "item.astarmobs.raw_venison": "Venado crudo",
+  "item.astarmobs.cooked_venison": "Venado cocinado"
 }

@@ -3,7 +3,11 @@
   "entity.astarmobs.bear": "Bear",
   "entity.astarmobs.deer": "Deer",
   "entity.astarmobs.caribou": "Caribou",
+  "subtitles.astarmobs.caribou_ambient": "Caribou wheezes",
+  "subtitles.astarmobs.caribou_hurt": "Caribou grunt",
   "item.astarmobs.bear_spawn_egg": "Bear Spawn Egg",
   "item.astarmobs.raw_bear_meat": "Raw Bear Meat",
-  "item.astarmobs.cooked_bear_meat": "Cooked Bear Meat"
+  "item.astarmobs.cooked_bear_meat": "Cooked Bear Meat",
+  "item.astarmobs.raw_venison": "Raw Venison",
+  "item.astarmobs.cooked_venison": "Cooked Venison"
 }

@@ -18,6 +18,7 @@ import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.BearEntity;
 import ovh.astarivi.mobs.entity.CaribouEntity;
 import ovh.astarivi.mobs.entity.DeerEntity;
+import ovh.astarivi.mobs.entity.forks.NoMalusAnimal;
 
 
 public class EntityRegistry {
@@ -70,7 +71,7 @@ public class EntityRegistry {
         SpawnPlacementsRegistry.register(DEER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.DEER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(DEER.get(), 8, 1, 4)));
 
-        SpawnPlacementsRegistry.register(CARIBOU, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CARIBOU, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, NoMalusAnimal::checkAnimalSpawnRules);
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 8, 1, 4)));
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_NETHER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 1, 2, 3)));
 

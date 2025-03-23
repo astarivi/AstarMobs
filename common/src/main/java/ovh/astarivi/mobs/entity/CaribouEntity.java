@@ -22,7 +22,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,17 +34,17 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ovh.astarivi.mobs.entity.generic.EntityResource;
-import ovh.astarivi.mobs.entity.generic.GenericAnimal;
-import ovh.astarivi.mobs.entity.generic.GenericAnimations;
-import ovh.astarivi.mobs.entity.generic.GenericControllers;
+import ovh.astarivi.mobs.entity.forks.NoMalusAnimal;
+import ovh.astarivi.mobs.entity.generic.*;
 import ovh.astarivi.mobs.entity.goal.CaribouHeatSeekGoal;
 import ovh.astarivi.mobs.registry.EntityRegistry;
 import ovh.astarivi.mobs.registry.SoundRegistry;
 import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
@@ -53,7 +52,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 
-public class CaribouEntity extends GenericAnimal {
+public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntity, EntityResourceProvider {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(CaribouEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ANTLER_TICKS = SynchedEntityData.defineId(CaribouEntity.class, EntityDataSerializers.INT);
     private static final Ingredient BREEDING_INGREDIENT_OVERWORLD = Ingredient.of(Items.APPLE);
@@ -61,7 +60,7 @@ public class CaribouEntity extends GenericAnimal {
     private static final Ingredient BREEDING_INGREDIENT_CRIMSON = Ingredient.of(Items.CRIMSON_FUNGUS);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public CaribouEntity(EntityType<? extends Animal> entityType, Level level) {
+    public CaribouEntity(EntityType<? extends NoMalusAnimal> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -112,6 +111,11 @@ public class CaribouEntity extends GenericAnimal {
         super.readAdditionalSaveData(compoundTag);
         this.entityData.set(VARIANT, compoundTag.getInt("Variant"));
         this.entityData.set(ANTLER_TICKS, compoundTag.getInt("Antler"));
+
+        if (isNetherVariant()) {
+            this.setPathfindingMalus(PathType.LAVA, 0.0F);
+            this.setPathfindingMalus(PathType.WATER, 16.0F);
+        }
     }
 
     @Override
@@ -165,9 +169,9 @@ public class CaribouEntity extends GenericAnimal {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5F, false));
         this.goalSelector.addGoal(2, new PanicGoal(this, 2.0F));
-        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
+//        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.25F, this::isFood, false));
-        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25F));
+//        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25F));
         this.goalSelector.addGoal(6, new CaribouHeatSeekGoal(this, 1F, 3));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0F));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -188,7 +192,7 @@ public class CaribouEntity extends GenericAnimal {
     }
 
     @Override
-    public boolean canMate(Animal animal) {
+    public boolean canMate(NoMalusAnimal animal) {
         return animal instanceof CaribouEntity partnerCaribou
                 && this != animal
                 && this.isInLove()
