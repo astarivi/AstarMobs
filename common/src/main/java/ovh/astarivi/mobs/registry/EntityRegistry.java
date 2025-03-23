@@ -20,42 +20,31 @@ import ovh.astarivi.mobs.entity.CaribouEntity;
 import ovh.astarivi.mobs.entity.DeerEntity;
 import ovh.astarivi.mobs.entity.forks.NoMalusAnimal;
 
+import static ovh.astarivi.mobs.registry.ResourceKeyCollection.*;
+
 
 public class EntityRegistry {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(AstarMobs.MOD_ID, Registries.ENTITY_TYPE);
-
-    public static final ResourceKey<EntityType<?>> BEAR_KEY = ResourceKey.create(
-            Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "bear")
-    );
-    public static final ResourceKey<EntityType<?>> CARIBOU_KEY = ResourceKey.create(
-            Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "caribou")
-    );
-    public static final ResourceKey<EntityType<?>> DEER_KEY = ResourceKey.create(
-            Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "deer")
-    );
 
     public static final RegistrySupplier<EntityType<BearEntity>> BEAR = ENTITIES.register("bear", () ->
             EntityType.Builder.of(BearEntity::new, MobCategory.CREATURE)
                     .sized(1.65F, 1.35F)
                     .eyeHeight(1.0F)
-                    .build(BEAR_KEY)
+                    .build(BEAR_ID)
     );
 
     public static final RegistrySupplier<EntityType<CaribouEntity>> CARIBOU = ENTITIES.register("caribou", () ->
             EntityType.Builder.of(CaribouEntity::new, MobCategory.CREATURE)
                     .sized(1.2F, 2.0F)
                     .eyeHeight(1.55F)
-                    .build(CARIBOU_KEY)
+                    .build(CARIBOU_ID)
     );
 
     public static final RegistrySupplier<EntityType<DeerEntity>> DEER = ENTITIES.register("deer", () ->
             EntityType.Builder.of(DeerEntity::new, MobCategory.CREATURE)
                     .sized(1F, 1.7F)
                     .eyeHeight(1.55F)
-                    .build(DEER_KEY)
+                    .build(DEER_ID)
     );
 
     private static void initAttributes() {

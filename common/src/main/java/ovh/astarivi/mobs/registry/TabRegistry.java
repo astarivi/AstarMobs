@@ -16,7 +16,7 @@ public class TabRegistry {
             AstarMobs.MOD_ID + "_tab",
             () -> CreativeTabRegistry.create(
                     Component.translatable("category.astarmobs"),
-                    () -> new ItemStack(ItemRegistry.RAW_BEAR_MEAT.get())
+                    () -> new ItemStack(ItemRegistry.CARIBOU_SPAWN_EGG.get())
             )
     );
 

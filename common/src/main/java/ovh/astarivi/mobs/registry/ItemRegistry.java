@@ -14,18 +14,13 @@ import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import ovh.astarivi.mobs.AstarMobs;
 
+import static ovh.astarivi.mobs.registry.ResourceKeyCollection.*;
+
 
 public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(AstarMobs.MOD_ID, Registries.ITEM);
-    // Spawn Eggs
-    public static final ResourceKey<Item> BEAR_SPAWN_EGG_ID = ResourceKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "bear_spawn_egg")
-    );
-    public static final ResourceKey<Item> CARIBOU_SPAWN_EGG_ID = ResourceKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "caribou_spawn_egg")
-    );
+
+    // region Spawn Eggs
     public static final RegistrySupplier<Item> BEAR_SPAWN_EGG = ITEMS.register(
             "bear_spawn_egg",
             () -> new ArchitecturySpawnEggItem(
@@ -42,29 +37,9 @@ public class ItemRegistry {
                             .setId(CARIBOU_SPAWN_EGG_ID)
                             .arch$tab(TabRegistry.ASTARMOBS_TAG))
     );
+    // endregion
 
-
-    // Foods
-    public static final ResourceKey<Item> RAW_BEAR_MEAT_ID = ResourceKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "raw_bear_meat")
-    );
-    public static final ResourceKey<Item> COOKED_BEAR_MEAT_ID = ResourceKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "cooked_bear_meat")
-    );
-    public static final ResourceKey<Item> RAW_VENISON_ID = ResourceKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "raw_venison")
-    );
-    public static final ResourceKey<Item> COOKED_VENISON_ID = ResourceKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "cooked_venison")
-    );
-    public static final ResourceKey<Item> CHARRED_VENISON_ID = ResourceKey.create(
-            Registries.ITEM,
-            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "charred_venison")
-    );
+    // region Foods
     public static final RegistrySupplier<Item> RAW_BEAR_MEAT = ITEMS.register(
             "raw_bear_meat",
             () -> new Item(
@@ -142,6 +117,7 @@ public class ItemRegistry {
                             .arch$tab(TabRegistry.ASTARMOBS_TAG)
             )
     );
+    // endregion
 
     public static void init() {
         ITEMS.register();
