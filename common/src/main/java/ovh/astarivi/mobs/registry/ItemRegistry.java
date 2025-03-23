@@ -61,6 +61,10 @@ public class ItemRegistry {
             Registries.ITEM,
             ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "cooked_venison")
     );
+    public static final ResourceKey<Item> CHARRED_VENISON_ID = ResourceKey.create(
+            Registries.ITEM,
+            ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "charred_venison")
+    );
     public static final RegistrySupplier<Item> RAW_BEAR_MEAT = ITEMS.register(
             "raw_bear_meat",
             () -> new Item(
@@ -118,6 +122,21 @@ public class ItemRegistry {
                             .food(new FoodProperties.Builder()
                                     .nutrition(8)
                                     .saturationModifier(0.812F)
+                                    .build()
+                            )
+                            .arch$tab(TabRegistry.ASTARMOBS_TAG)
+            )
+    );
+
+    // TODO: Make this a fuel
+    public static final RegistrySupplier<Item> CHARRED_VENISON = ITEMS.register(
+            "charred_venison",
+            () -> new Item(
+                    new Item.Properties()
+                            .setId(CHARRED_VENISON_ID)
+                            .food(new FoodProperties.Builder()
+                                    .nutrition(2)
+                                    .saturationModifier(0.25F)
                                     .build()
                             )
                             .arch$tab(TabRegistry.ASTARMOBS_TAG)
