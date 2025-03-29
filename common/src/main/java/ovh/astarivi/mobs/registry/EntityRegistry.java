@@ -6,9 +6,9 @@ import dev.architectury.registry.level.entity.SpawnPlacementsRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -16,8 +16,6 @@ import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.BearEntity;
 import ovh.astarivi.mobs.entity.CaribouEntity;
 import ovh.astarivi.mobs.entity.DeerEntity;
-
-import static ovh.astarivi.mobs.registry.ResourceKeyCollection.*;
 
 
 public class EntityRegistry {
@@ -27,21 +25,36 @@ public class EntityRegistry {
             EntityType.Builder.of(BearEntity::new, MobCategory.CREATURE)
                     .sized(1.65F, 1.35F)
                     .eyeHeight(1.0F)
-                    .build(BEAR_ID)
+                    .build(
+                            ResourceKey.create(
+                                    Registries.ENTITY_TYPE,
+                                    ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "bear")
+                            )
+                    )
     );
 
     public static final RegistrySupplier<EntityType<CaribouEntity>> CARIBOU = ENTITIES.register("caribou", () ->
             EntityType.Builder.of(CaribouEntity::new, MobCategory.CREATURE)
                     .sized(1.2F, 2.0F)
                     .eyeHeight(1.55F)
-                    .build(CARIBOU_ID)
+                    .build(
+                            ResourceKey.create(
+                                    Registries.ENTITY_TYPE,
+                                    ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "caribou")
+                            )
+                    )
     );
 
     public static final RegistrySupplier<EntityType<DeerEntity>> DEER = ENTITIES.register("deer", () ->
             EntityType.Builder.of(DeerEntity::new, MobCategory.CREATURE)
                     .sized(1F, 1.5F)
                     .eyeHeight(1.35F)
-                    .build(DEER_ID)
+                    .build(
+                            ResourceKey.create(
+                                    Registries.ENTITY_TYPE,
+                                    ResourceLocation.fromNamespaceAndPath(AstarMobs.MOD_ID, "deer")
+                            )
+                    )
     );
 
     private static void initAttributes() {
