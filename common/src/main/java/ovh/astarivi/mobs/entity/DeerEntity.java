@@ -157,10 +157,11 @@ public class DeerEntity extends GenericAnimal {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5D, false));
         this.goalSelector.addGoal(2, new PanicGoal(this, 2.0F));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
-        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25F));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0F));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.25F, BREEDING_INGREDIENT, false));
+        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25F));
+        this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0F));
+        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new DeerHurtByTargetGoal());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, this::isAngryAt));
         this.targetSelector.addGoal(3, new ResetUniversalAngerTargetGoal(this, false));
@@ -198,6 +199,8 @@ public class DeerEntity extends GenericAnimal {
 
     @Override
     public boolean isFood(ItemStack itemStack) {
+        if (isBaby()) return true;
+
         if (isMale() && getAntlerGrowStage() != 3) {
             return false;
         }
