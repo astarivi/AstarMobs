@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -90,7 +92,17 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
         return getEntityResource().textureOverlays.get(getAntlerGrowStage());
     }
 
-    // region Attributes
+    public static boolean checkSpawnRules(EntityType<? extends NoMalusAnimal> entityType, @NotNull LevelAccessor levelAccessor, EntitySpawnReason entitySpawnReason, BlockPos blockPos, RandomSource randomSource) {
+        // Overworld
+        if (levelAccessor.dimensionType().bedWorks()) {
+            return NoMalusAnimal.checkAnimalSpawnRules(entityType, levelAccessor, entitySpawnReason, blockPos, randomSource);
+        }
+
+        // Nether
+        return !levelAccessor.getBlockState(blockPos.below()).is(Blocks.NETHER_WART_BLOCK) && !levelAccessor.getBlockState(blockPos.below()).is(Blocks.WARPED_WART_BLOCK);
+    }
+
+        // region Attributes
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.TEMPT_RANGE, 10.0D)
@@ -261,9 +273,8 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
         super.tick();
 
         if (!this.level().isClientSide() && this.level() instanceof ServerLevel serverLevel) {
-            int antlerTicks = getAntlerTicks();
-
             if (!isBaby()) {
+                int antlerTicks = getAntlerTicks();
                 final int antlerGrowTicks = getAntlerGrowTicks();
 
                 if (antlerTicks < antlerGrowTicks) {

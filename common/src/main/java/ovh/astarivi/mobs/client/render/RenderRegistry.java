@@ -28,9 +28,10 @@ public class RenderRegistry {
         EntityRendererRegistry.register(
                 EntityRegistry.DEER,
                 ctx -> GenericEntityRenderer.Builder
-                        .ofGeneric(ctx)
+                        .ofAnimatedHead(ctx)
                         .setBabyCapable(true)
-                        .withScaleFactor(2.5F)
+                        .setLayerSupport(true)
+                        .withScaleFactor(1.0F)
                         .build()
         );
     }

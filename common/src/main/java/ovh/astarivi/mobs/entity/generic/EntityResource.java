@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 public enum EntityResource {
     BEAR("bear", 2, 1),
     CARIBOU("caribou", 4, 4),
-    DEER("deer");
+    DEER("deer", 1, 4);
 
     public final String id;
     public final ResourceLocation model;

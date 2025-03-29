@@ -20,7 +20,6 @@ import java.util.EnumSet;
 
 
 public class BearFetchHoneyGoal extends MoveToBlockGoal {
-
     private static final ArrayList<BlockPos> offsets = precomputeOffsets();
     private int tickCounter = 0;
     private final BearEntity bear;

@@ -6,8 +6,6 @@ import dev.architectury.registry.level.entity.SpawnPlacementsRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -18,7 +16,6 @@ import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.BearEntity;
 import ovh.astarivi.mobs.entity.CaribouEntity;
 import ovh.astarivi.mobs.entity.DeerEntity;
-import ovh.astarivi.mobs.entity.forks.NoMalusAnimal;
 
 import static ovh.astarivi.mobs.registry.ResourceKeyCollection.*;
 
@@ -42,8 +39,8 @@ public class EntityRegistry {
 
     public static final RegistrySupplier<EntityType<DeerEntity>> DEER = ENTITIES.register("deer", () ->
             EntityType.Builder.of(DeerEntity::new, MobCategory.CREATURE)
-                    .sized(1F, 1.7F)
-                    .eyeHeight(1.55F)
+                    .sized(1F, 1.5F)
+                    .eyeHeight(1.35F)
                     .build(DEER_ID)
     );
 
@@ -60,10 +57,9 @@ public class EntityRegistry {
         SpawnPlacementsRegistry.register(DEER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.DEER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(DEER.get(), 8, 1, 4)));
 
-        SpawnPlacementsRegistry.register(CARIBOU, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, NoMalusAnimal::checkAnimalSpawnRules);
+        SpawnPlacementsRegistry.register(CARIBOU, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CaribouEntity::checkSpawnRules);
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 8, 1, 4)));
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_NETHER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 1, 2, 3)));
-
     }
 
     public static void init() {

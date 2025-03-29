@@ -3,6 +3,7 @@ package ovh.astarivi.mobs.entity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ovh.astarivi.mobs.AstarMobs;
 import ovh.astarivi.mobs.entity.generic.EntityResource;
 import ovh.astarivi.mobs.entity.generic.GenericAnimal;
 import ovh.astarivi.mobs.entity.generic.GenericAnimations;
@@ -43,7 +43,8 @@ import java.util.UUID;
 
 public class DeerEntity extends GenericAnimal {
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(DeerEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient BREEDING_INGREDIENT = Ingredient.of(Items.APPLE);
+    private static final EntityDataAccessor<Integer> ANTLER_TICKS = SynchedEntityData.defineId(DeerEntity.class, EntityDataSerializers.INT);
+    private static final Ingredient BREEDING_INGREDIENT = Ingredient.of(Items.SWEET_BERRIES);
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(5, 10);
     private int angerTime;
     @Nullable private UUID angerTarget;
@@ -56,6 +57,15 @@ public class DeerEntity extends GenericAnimal {
     @Override
     public EntityResource getEntityResource() {
         return EntityResource.DEER;
+    }
+
+    @Override
+    public boolean shouldDisplayLayer() {
+        return isMale();
+    }
+
+    public ResourceLocation getDisplayLayer() {
+        return getEntityResource().textureOverlays.get(getAntlerGrowStage());
     }
 
     // region Attributes
@@ -75,8 +85,13 @@ public class DeerEntity extends GenericAnimal {
         }
 
         SpawnGroupData data = super.finalizeSpawn(serverLevelAccessor, difficultyInstance, entitySpawnReason, spawnGroupData);
-        // 50% roll chance for gender
+
         setMale(this.random.nextInt(2) == 0);
+
+        if (isMale()) {
+            setAntlerTicks(this.random.nextInt(getAntlerGrowTicks()));
+        }
+
         return data;
     }
 
@@ -88,10 +103,30 @@ public class DeerEntity extends GenericAnimal {
         this.entityData.set(MALE, white);
     }
 
+    public int getAntlerTicks() {
+        return this.entityData.get(ANTLER_TICKS);
+    }
+
+    public void setAntlerTicks(int val) {
+        this.entityData.set(ANTLER_TICKS, val);
+    }
+
+    public int getAntlerGrowStage() {
+        int antlerGrowTicks = getAntlerGrowTicks();
+        int stages = antlerGrowTicks / 4;
+
+        return (getAntlerTicks() % antlerGrowTicks) / stages;
+    }
+
+    public int getAntlerGrowTicks() {
+        return 14_000;
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(MALE, false);
+        builder.define(ANTLER_TICKS, 0);
     }
 
     @Override
@@ -99,6 +134,7 @@ public class DeerEntity extends GenericAnimal {
         super.readAdditionalSaveData(compoundTag);
         this.readPersistentAngerSaveData(this.level(), compoundTag);
         this.entityData.set(MALE, compoundTag.getBoolean("Male"));
+        this.entityData.set(ANTLER_TICKS, compoundTag.getInt("Antler"));
     }
 
     @Override
@@ -106,6 +142,7 @@ public class DeerEntity extends GenericAnimal {
         super.addAdditionalSaveData(compoundTag);
         this.addPersistentAngerSaveData(compoundTag);
         compoundTag.putBoolean("Male", isMale());
+        compoundTag.putInt("Antler", getAntlerTicks());
     }
     // endregion
 
@@ -130,9 +167,16 @@ public class DeerEntity extends GenericAnimal {
     public @Nullable AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
         AgeableMob offspring = EntityRegistry.DEER.get().create(serverLevel, EntitySpawnReason.BREEDING);
 
+        if (isMale()) {
+            setAntlerTicks(0);
+        } else if (ageableMob instanceof DeerEntity matingPartner && matingPartner.isMale()) {
+            matingPartner.setAntlerTicks(0);
+        }
+
         // This should always be true. This is here for extra safety.
         if (offspring instanceof DeerEntity deerOffspring) {
             deerOffspring.setMale(this.random.nextInt(2) == 0);
+            deerOffspring.setAntlerTicks(0);
         }
 
         return offspring;
@@ -144,11 +188,17 @@ public class DeerEntity extends GenericAnimal {
             return false;
         }
 
-        return animal instanceof DeerEntity partnerDeer && this.isMale() != partnerDeer.isMale();
+        return animal instanceof DeerEntity partnerDeer
+                && this.isMale() != partnerDeer.isMale()
+                && (getAntlerGrowStage() == 3 || partnerDeer.getAntlerGrowStage() == 3);
     }
 
     @Override
     public boolean isFood(ItemStack itemStack) {
+        if (isMale() && getAntlerGrowStage() != 3) {
+            return false;
+        }
+
         return BREEDING_INGREDIENT.test(itemStack);
     }
 
@@ -182,6 +232,15 @@ public class DeerEntity extends GenericAnimal {
         super.tick();
 
         if (!this.level().isClientSide) {
+            if (!isBaby() && isMale()) {
+                int antlerTicks = getAntlerTicks();
+                final int antlerGrowTicks = getAntlerGrowTicks();
+
+                if (antlerTicks < antlerGrowTicks) {
+                    setAntlerTicks(antlerTicks + 1);
+                }
+            }
+
             this.updatePersistentAnger((ServerLevel)this.level(), true);
         }
     }
@@ -212,7 +271,6 @@ public class DeerEntity extends GenericAnimal {
             }
         }
     }
-
     // endregion
 
     @Override
@@ -242,16 +300,6 @@ public class DeerEntity extends GenericAnimal {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
-    }
-    // endregion
-
-    // region Textures
-    @Override
-    public ResourceLocation getTexture() {
-        return ResourceLocation.fromNamespaceAndPath(
-                AstarMobs.MOD_ID,
-                "textures/entity/deer/deer%s.png".formatted(isMale() ? "_male": "")
-        );
     }
     // endregion
 }
