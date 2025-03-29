@@ -3,13 +3,19 @@
   "entity.astarmobs.bear": "Bear",
   "entity.astarmobs.deer": "Deer",
   "entity.astarmobs.caribou": "Caribou",
-  "subtitles.astarmobs.caribou_ambient": "Caribou wheezes",
-  "subtitles.astarmobs.caribou_hurt": "Caribou grunt",
+  "subtitles.astarmobs.caribou_ambient": "Caribou grunts",
+  "subtitles.astarmobs.caribou_hurt": "Caribou hurt",
   "item.astarmobs.bear_spawn_egg": "Bear Spawn Egg",
   "item.astarmobs.raw_bear_meat": "Raw Bear Meat",
   "item.astarmobs.cooked_bear_meat": "Cooked Bear Meat",
   "item.astarmobs.caribou_spawn_egg": "Caribou Spawn Egg",
   "item.astarmobs.raw_venison": "Raw Venison",
   "item.astarmobs.cooked_venison": "Cooked Venison",
-  "item.astarmobs.charred_venison": "Charred Venison"
+  "item.astarmobs.charred_venison": "Charred Venison",
+  "subtitles.astarmobs.fawn_ambient": "Fawn bleats",
+  "subtitles.astarmobs.fawn_hurt": "Fawn distress",
+  "subtitles.astarmobs.doe_ambient": "Doe bleats",
+  "subtitles.astarmobs.doe_hurt": "Doe hurt",
+  "subtitles.astarmobs.buck_ambient": "Buck grunt",
+  "subtitles.astarmobs.buck_hurt": "Buck hurt"
 }

@@ -3,10 +3,11 @@ package ovh.astarivi.mobs.entity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,6 +32,7 @@ import ovh.astarivi.mobs.entity.generic.GenericAnimal;
 import ovh.astarivi.mobs.entity.generic.GenericAnimations;
 import ovh.astarivi.mobs.entity.generic.GenericControllers;
 import ovh.astarivi.mobs.registry.EntityRegistry;
+import ovh.astarivi.mobs.registry.SoundRegistry;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -71,6 +73,7 @@ public class DeerEntity extends GenericAnimal {
     // region Attributes
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes()
+                .add(Attributes.TEMPT_RANGE, 10.0D)
                 .add(Attributes.MAX_HEALTH, 10.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
@@ -119,7 +122,7 @@ public class DeerEntity extends GenericAnimal {
     }
 
     public int getAntlerGrowTicks() {
-        return 14_000;
+        return 16_000;
     }
 
     @Override
@@ -302,4 +305,38 @@ public class DeerEntity extends GenericAnimal {
         return cache;
     }
     // endregion
+
+    // region Sounds
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        if (random.nextFloat() < 0.7f) {
+            return null;
+        }
+
+        if (isBaby()) {
+            return SoundRegistry.DEER_BABY_AMBIENT.get();
+        } else if (isMale()) {
+            return SoundRegistry.DEER_AMBIENT.get();
+        } else {
+            return SoundRegistry.DEER_FEMALE_AMBIENT.get();
+        }
+    }
+
+    @Override
+    protected @Nullable SoundEvent getDeathSound() {
+        if (isBaby()) {
+            return SoundRegistry.DEER_BABY_HURT.get();
+        } else if (isMale()) {
+            return SoundRegistry.DEER_HURT.get();
+        } else {
+            return SoundRegistry.DEER_FEMALE_HURT.get();
+        }
+    }
+
+    @Override
+    protected @Nullable SoundEvent getHurtSound(DamageSource damageSource) {
+        return getDeathSound();
+    }
+    // endregion
+
 }

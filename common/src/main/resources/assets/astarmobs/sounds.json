@@ -1,16 +1,53 @@
 {
   "caribou_ambient": {
-    "subtitle": "astarmobs.caribou_ambient",
+    "subtitle": "subtitles.astarmobs.caribou_ambient",
     "sounds": [
       "astarmobs:caribou_ambient_0",
       "astarmobs:caribou_ambient_1"
     ]
   },
   "caribou_hurt": {
-    "subtitle": "astarmobs.caribou_hurt",
+    "subtitle": "subtitles.astarmobs.caribou_hurt",
     "sounds": [
       "astarmobs:caribou_hurt_0",
       "astarmobs:caribou_hurt_1"
+    ]
+  },
+  "deer_baby_ambient": {
+    "subtitle": "subtitles.astarmobs.fawn_ambient",
+    "sounds": [
+      "astarmobs:deer_baby_ambient"
+    ]
+  },
+  "deer_baby_hurt": {
+    "subtitle": "subtitles.astarmobs.fawn_hurt",
+    "sounds": [
+      "astarmobs:deer_baby_hurt"
+    ]
+  },
+  "deer_female_ambient": {
+    "subtitle": "subtitles.astarmobs.doe_ambient",
+    "sounds": [
+      "astarmobs:deer_female_ambient"
+    ]
+  },
+  "deer_female_hurt": {
+    "subtitle": "subtitles.astarmobs.doe_hurt",
+    "sounds": [
+      "astarmobs:deer_female_hurt"
+    ]
+  },
+  "deer_ambient": {
+    "subtitle": "subtitles.astarmobs.buck_ambient",
+    "sounds": [
+      "astarmobs:deer_ambient_0",
+      "astarmobs:deer_ambient_1"
+    ]
+  },
+  "deer_hurt": {
+    "subtitle": "subtitles.astarmobs.buck_hurt",
+    "sounds": [
+      "astarmobs:deer_hurt"
     ]
   }
 }

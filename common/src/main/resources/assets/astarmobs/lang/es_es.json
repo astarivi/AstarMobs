@@ -11,5 +11,11 @@
   "item.astarmobs.caribou_spawn_egg": "Generar caribú",
   "item.astarmobs.raw_venison": "Venado crudo",
   "item.astarmobs.cooked_venison": "Venado cocinado",
-  "item.astarmobs.charred_venison": "Venado carbonizado"
+  "item.astarmobs.charred_venison": "Venado carbonizado",
+  "subtitles.astarmobs.fawn_ambient": "Cervatillo canta",
+  "subtitles.astarmobs.fawn_hurt": "Cervatillo angustiado",
+  "subtitles.astarmobs.doe_ambient": "Cierva canta",
+  "subtitles.astarmobs.doe_hurt": "Cierva gruñe",
+  "subtitles.astarmobs.buck_ambient": "Ciervo ronca",
+  "subtitles.astarmobs.buck_hurt": "Ciervo gruñe"
 }
