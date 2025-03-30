@@ -27,11 +27,13 @@ public class ItemRegistry {
             EntityRegistry.BEAR
     );
     public static final RegistrySupplier<Item> CARIBOU_SPAWN_EGG = registerSpawnEgg(
-        "caribou_spawn_egg",
+            "caribou_spawn_egg",
             EntityRegistry.CARIBOU
     );
-
-    // TODO: Add deer spawn egg
+    public static final RegistrySupplier<Item> DEER_SPAWN_EGG = registerSpawnEgg(
+            "deer_spawn_egg",
+            EntityRegistry.DEER
+    );
     // endregion
 
     // region Foods

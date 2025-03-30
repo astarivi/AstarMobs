@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "astarmobs:item/deer_spawn_egg"
+  }
+}
