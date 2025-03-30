@@ -127,6 +127,6 @@ public class ItemRegistry {
 
     public static void init() {
         ITEMS.register();
-        FuelRegistry.register(200, CHARRED_VENISON.get());
+        CHARRED_VENISON.listen((item) -> FuelRegistry.register(200, item));
     }
 }

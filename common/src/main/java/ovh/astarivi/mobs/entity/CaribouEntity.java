@@ -141,6 +141,11 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
 
     public int getAntlerGrowStage() {
         int antlerGrowTicks = getAntlerGrowTicks();
+
+        if (getAntlerTicks() >= antlerGrowTicks) {
+            return 3;
+        }
+
         int stages = antlerGrowTicks / 4;
 
         return (getAntlerTicks() % antlerGrowTicks) / stages;

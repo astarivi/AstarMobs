@@ -89,10 +89,13 @@ public class DeerEntity extends GenericAnimal {
 
         SpawnGroupData data = super.finalizeSpawn(serverLevelAccessor, difficultyInstance, entitySpawnReason, spawnGroupData);
 
-        setMale(this.random.nextInt(2) == 0);
-
-        if (isMale()) {
+        if (this.random.nextBoolean()) {
+            setMale(true);
             setAntlerTicks(this.random.nextInt(getAntlerGrowTicks()));
+        }
+
+        if (isBaby()) {
+            setAntlerTicks(0);
         }
 
         return data;
@@ -116,6 +119,11 @@ public class DeerEntity extends GenericAnimal {
 
     public int getAntlerGrowStage() {
         int antlerGrowTicks = getAntlerGrowTicks();
+
+        if (getAntlerTicks() >= antlerGrowTicks) {
+            return 3;
+        }
+
         int stages = antlerGrowTicks / 4;
 
         return (getAntlerTicks() % antlerGrowTicks) / stages;
@@ -199,8 +207,6 @@ public class DeerEntity extends GenericAnimal {
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        if (isBaby()) return true;
-
         if (isMale() && getAntlerGrowStage() != 3) {
             return false;
         }
@@ -240,9 +246,8 @@ public class DeerEntity extends GenericAnimal {
         if (!this.level().isClientSide) {
             if (!isBaby() && isMale()) {
                 int antlerTicks = getAntlerTicks();
-                final int antlerGrowTicks = getAntlerGrowTicks();
 
-                if (antlerTicks < antlerGrowTicks) {
+                if (antlerTicks < getAntlerGrowTicks()) {
                     setAntlerTicks(antlerTicks + 1);
                 }
             }
