@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#astarmobs:bear_spawns",
+  "spawners": [
+    {
+      "type": "astarmobs:bear",
+      "weight": 6,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

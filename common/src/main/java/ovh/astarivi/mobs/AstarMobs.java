@@ -6,6 +6,7 @@ import ovh.astarivi.mobs.registry.ItemRegistry;
 import ovh.astarivi.mobs.registry.SoundRegistry;
 import ovh.astarivi.mobs.registry.TabRegistry;
 
+// TODO: Fix Caribou Nether spawning on NeoForge
 public final class AstarMobs {
     public static final String MOD_ID = "astarmobs";
 

@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#astarmobs:caribou_nether_spawns",
+  "spawners": [
+    {
+      "type": "astarmobs:caribou",
+      "weight": 1,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

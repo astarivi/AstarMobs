@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#astarmobs:deer_spawns",
+  "spawners": [
+    {
+      "type": "astarmobs:deer",
+      "weight": 8,
+      "minCount": 1,
+      "maxCount": 4
+    }
+  ]
+}
