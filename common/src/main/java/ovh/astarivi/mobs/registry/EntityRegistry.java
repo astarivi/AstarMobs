@@ -34,7 +34,7 @@ public class EntityRegistry {
     );
 
     public static final RegistrySupplier<EntityType<CaribouEntity>> CARIBOU = ENTITIES.register("caribou", () ->
-            EntityType.Builder.of(CaribouEntity::new, MobCategory.CREATURE)
+            EntityType.Builder.of(CaribouEntity::new, MobCategory.MONSTER)
                     .sized(1.2F, 2.0F)
                     .eyeHeight(1.55F)
                     .build(
