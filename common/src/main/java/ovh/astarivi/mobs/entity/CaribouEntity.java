@@ -66,6 +66,7 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
 
     public CaribouEntity(EntityType<? extends NoMalusAnimal> entityType, Level level) {
         super(entityType, level);
+        setPersistenceRequired();
     }
 
     @Override
