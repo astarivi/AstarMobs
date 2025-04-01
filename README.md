@@ -8,7 +8,7 @@ Adds diverse animals with unique behaviors to your Minecraft world.
 - Architectury API >= 15.0.3
 - GeckoLib >= 4.8.4
 
-This mod requires Architectury API, GeckoLib (and Fabric API if using Fabric).
+This mod requires Architectury API and GeckoLib.
 
 # Animals
 
