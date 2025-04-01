@@ -1,5 +1,4 @@
 # Astar Mobs
-
 Adds diverse animals with unique behaviors to your Minecraft world.
 
 ### Currently supporting:
@@ -25,5 +24,4 @@ Passive mob, commonly found in cold weather, but some variants are known to roam
 Can be farmed with shears.
 
 # Sources
-
 All project files are found under the `./models` folder and are licensed under GPLv3.

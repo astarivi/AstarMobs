@@ -11,7 +11,7 @@ authors = "astarivi, Monomaximo"
 description = '''
 Adds diverse animals with unique behaviors, making your world feel more alive
 '''
-#logoFile = ""
+logoFile = "assets/astarmobs/icon.png"
 
 [[dependencies.astarmobs]]
 modId = "neoforge"
@@ -30,7 +30,7 @@ side = "BOTH"
 [[dependencies.astarmobs]]
 modId = "architectury"
 type = "required"
-versionRange = "[15.0.1,)"
+versionRange = "[15.0.3,)"
 ordering = "AFTER"
 side = "BOTH"
 
