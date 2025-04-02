@@ -56,7 +56,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 
-public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntity, EntityResourceProvider {
+public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntity, EntityResourceProvider, Shearable {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(CaribouEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ANTLER_TICKS = SynchedEntityData.defineId(CaribouEntity.class, EntityDataSerializers.INT);
     private static final Ingredient BREEDING_INGREDIENT_OVERWORLD = Ingredient.of(Items.APPLE);
@@ -246,6 +246,8 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
             offspring.setVariant(random.nextBoolean() ? ourVariant : theirVariant);
         }
 
+        setAntlerTicks(0);
+
         return offspring;
     }
 
@@ -310,8 +312,8 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
         ItemStack itemStack = player.getItemInHand(interactionHand);
         if (itemStack.is(Items.SHEARS)) {
             if (this.level() instanceof ServerLevel serverLevel) {
-                if (getAntlerGrowStage() == 3) {
-                    this.dropAntlers(serverLevel, SoundSource.PLAYERS);
+                if (readyForShearing()) {
+                    this.shear(serverLevel, SoundSource.PLAYERS, itemStack);
                     this.gameEvent(GameEvent.SHEAR, player);
                     itemStack.hurtAndBreak(1, player, getSlotForHand(interactionHand));
                     return InteractionResult.SUCCESS_SERVER;
@@ -408,8 +410,12 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
     // region Animations
     private <E extends GeoAnimatable> PlayState walkCycle(software.bernie.geckolib.animation.AnimationState<E> event) {
         if (event.isMoving()) {
+            event.setControllerSpeed(
+                    this.walkAnimation.speed(event.getPartialTick()) * 2.0F
+            );
             return event.setAndContinue(GenericAnimations.WALK.getRawAnimation());
         } else {
+            event.setControllerSpeed(1.0F);
             return event.setAndContinue(GenericAnimations.IDLE.getRawAnimation());
         }
     }
@@ -427,6 +433,16 @@ public class CaribouEntity extends NoMalusAnimal implements NeutralMob, GeoEntit
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
+    }
+
+    @Override
+    public void shear(ServerLevel serverLevel, SoundSource soundSource, ItemStack itemStack) {
+        this.dropAntlers(serverLevel, soundSource);
+    }
+
+    @Override
+    public boolean readyForShearing() {
+        return this.isAlive() && !this.isBaby() && getAntlerGrowStage() == 3;
     }
     // endregion
 }

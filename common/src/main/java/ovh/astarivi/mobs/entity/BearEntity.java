@@ -346,8 +346,12 @@ public class BearEntity extends GenericAnimal {
     // region Animations
     private <E extends GeoAnimatable> PlayState walkCycle(software.bernie.geckolib.animation.AnimationState<E> event) {
         if (event.isMoving()) {
+            event.setControllerSpeed(
+                    this.walkAnimation.speed(event.getPartialTick()) * 2.0F
+            );
             return event.setAndContinue(GenericAnimations.WALK.getRawAnimation());
         } else {
+            event.setControllerSpeed(1.0F);
             return event.setAndContinue(GenericAnimations.IDLE.getRawAnimation());
         }
     }

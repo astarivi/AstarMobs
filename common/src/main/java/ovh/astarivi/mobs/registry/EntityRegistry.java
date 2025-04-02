@@ -35,7 +35,7 @@ public class EntityRegistry {
 
     public static final RegistrySupplier<EntityType<CaribouEntity>> CARIBOU = ENTITIES.register("caribou", () ->
             EntityType.Builder.of(CaribouEntity::new, MobCategory.MONSTER)
-                    .sized(1.2F, 2.0F)
+                    .sized(1F, 2.0F)
                     .eyeHeight(1.55F)
                     .build(
                             ResourceKey.create(
@@ -72,7 +72,8 @@ public class EntityRegistry {
 
         SpawnPlacementsRegistry.register(CARIBOU, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, CaribouEntity::checkSpawnRules);
         BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 8, 1, 4)));
-        BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_NETHER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 1, 2, 3)));
+        // FIXME: Nether spawn rates are too low
+        BiomeModifications.addProperties(b -> b.hasTag(TagRegistry.CARIBOU_NETHER_BIOMES), (ctx, b) -> b.getSpawnProperties().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(CARIBOU.get(), 6, 2, 3)));
     }
 
     public static void init() {
